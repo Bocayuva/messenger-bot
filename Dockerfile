@@ -10,4 +10,4 @@ RUN ls -al -R; \
     npm -g dedupe; \
     npm cache clean --force
 VOLUME ["/app"]
-CMD ["start"]
+CMD ["npm","start"]
