@@ -1,0 +1,16 @@
+'use strict';
+
+module.exports = {
+  TEXT: 'TEXT',
+  OPTION: 'OPTION',
+  PHOTO: 'PHOTO',
+  DOCUMENT: 'DOCUMENT',
+  GENERIC: 'GENERIC',
+  AUDIO: 'AUDIO',
+  VOICE: 'VOICE',
+  VIDEO: 'VIDEO',
+  VENUE: 'VENUE',
+  LOCATION: 'LOCATION',
+  CONTACT: 'CONTACT',
+  MEDIAGROUP: 'MEDIAGROUP'
+};

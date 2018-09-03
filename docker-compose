@@ -1,0 +1,18 @@
+version: '2'
+services:
+  fake_bot:
+    build:
+      context: .
+      dockerfile: ./dockers/rabbitmq/Dockerfile
+    container_name: fake_bot
+    hostname: fake_bot
+    restart: 'always'
+    ports:
+      - 3000:3000
+    volumes:
+      - ./var/log:/var/log
+    networks:
+      - adcc
+networks:
+  adcc:
+    driver: bridge
