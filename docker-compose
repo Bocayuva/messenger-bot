@@ -1,6 +1,7 @@
 version: '2'
 services:
-  fake_bot:
+  messenger_bot:
+    image: messenger-bot:latest
     build:
       context: .
       dockerfile: ./dockers/rabbitmq/Dockerfile
