@@ -5,11 +5,11 @@ services:
     build:
       context: .
       dockerfile: ./dockers/rabbitmq/Dockerfile
-    container_name: fake_bot
-    hostname: fake_bot
+    container_name: messenger-bot
+    hostname: messenger-bot
     restart: 'always'
     ports:
-      - 3000:3000
+      - 443: 443
     volumes:
       - ./var/log:/var/log
     networks:
