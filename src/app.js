@@ -2,12 +2,16 @@ require('dotenv').config();
 
 const webhook = require('./controllers/webhook');
 
-// Imports dependencies and set up http server
+const http = require('http');
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
-const http = require('http');
+
+
 app.use(bodyParser.json());
+app.get('/', function (req, res) {
+  res.send('Hello World!');
+});
 app.get('/webhook', webhook.facebookVerification);
 app.post('/webhook', webhook.facebook);
 
