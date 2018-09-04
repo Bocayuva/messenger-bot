@@ -10,6 +10,9 @@ const app = express();
 
 app.use(bodyParser.json());
 app.get('/', function (req, res) {
+  console.log('________________________');
+  console.log('_____ Hello World! _____');
+  console.log('________________________');
   res.send('Hello World!');
 });
 app.get('/webhook', webhook.facebookVerification);
