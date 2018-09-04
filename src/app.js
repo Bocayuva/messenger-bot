@@ -19,4 +19,4 @@ app.get('/webhook', webhook.facebookVerification);
 app.post('/webhook', webhook.facebook);
 
 const server = http.createServer(app);
-server.listen(443, () => console.log('ADCC has started | port:', 443));
+server.listen(3000, () => console.log('ADCC has started | port:', 3000));
