@@ -14,30 +14,32 @@ class MessageHandler {
 
   _sessionHandler(response) {
     console.log(`___ _sessionHandler -> userId: ${response.userId}`);
-    let session = null;
+    let session = null, position = null;
     for (let index = 0; index < this.sessions.length; index++) {
       const ssn = this.sessions[index];
       console.log(`___ _sessionHandler -> userId: ${response.userId} - index: ${index} - session:`, ssn);
-      if(ssn.userId = response.userId){
+      if(ssn.userId === response.userId){
         session = Object.assign({}, ssn);
+        position = index;
         console.log(`___ _sessionHandler -> session located:`, session);
-        if (!session) {
-          session = {
-            userId: response.userId,
-            id: this.sessions.length,
-            end: false,
-            lastMsg: null,
-            payload: response
-          };
-          console.log(`___ _sessionHandler -> creating new session:`, session);
-          this.sessions.push(session);
-        } else if (!session.end) {
-          session.payload = response;
-          this.sessions[index] =  Object.assign({}, session);
-          console.log(`___ _sessionHandler -> session already finished.`, session);
-        }
         break;
       }
+    }
+
+    if (!session) {
+      session = {
+        userId: response.userId,
+        id: this.sessions.length,
+        end: false,
+        lastMsg: null,
+        payload: response
+      };
+      console.log(`___ _sessionHandler -> creating new session:`, session);
+      this.sessions.push(session);
+    } else if (!session.end) {
+      session.payload = response;
+      this.sessions[position] =  Object.assign({}, session);
+      console.log(`___ _sessionHandler -> session already finished.`, session);
     }
 
     return session;
@@ -122,6 +124,8 @@ class MessageHandler {
 
   async eventHandler(event) {
     console.log('############################################################');
+    console.log('____________________________________________________________');
+    console.log('*** SESSIONS:', this.sessions);
     console.log('____________________________________________________________');
     try {
       console.log('___ EVENT:', event);
