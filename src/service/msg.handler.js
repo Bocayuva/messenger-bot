@@ -13,10 +13,11 @@ class MessageHandler {
   }
 
   _sessionHandler(response) {
+    console.log(`___ _sessionHandler -> userId: ${response.userId}`);
     let session = null;
     for (let index = 0; index < this.sessions.length; index++) {
-      console.log(`___ _sessionHandler -> userId: ${response.userId} - index: ${index}`);
       const ssn = this.sessions[index];
+      console.log(`___ _sessionHandler -> userId: ${response.userId} - index: ${index} - session:`, ssn);
       if(ssn.userId = response.userId){
         session = Object.assign({}, ssn);
         console.log(`___ _sessionHandler -> session located:`, session);
@@ -126,20 +127,20 @@ class MessageHandler {
       console.log('___ EVENT:', event);
       console.log('__________________________________________________________');
       let response = this.messenger.getEventData(event);
-      console.log('___ response:', response);
+      console.log('___ RESPONSE:', response);
       console.log('__________________________________________________________');
       let session = this._sessionHandler(response);
-      console.log('___ session:', session);
+      console.log('___ SESSION:', session);
       console.log('__________________________________________________________');
       let msgFlow = this._setNextMessage(session);
-      console.log('___ msgFlow:', msgFlow);
+      console.log('___ MSGFLOW:', msgFlow);
       console.log('__________________________________________________________');
       const msgPkg = this._buildMessage(session, msgFlow);
-      console.log('___ msgPkg:', msgPkg);
+      console.log('___ MSGPKG:', msgPkg);
       console.log('__________________________________________________________');
       await this.messenger.sendMessage(this.token, msgPkg.userId, msgPkg.arg);
     } catch (error) {
-      console.log('___ error:', error);
+      console.log('___ ERROR:', error);
     }
     console.log('____________________________________________________________');
     console.log('############################################################');
