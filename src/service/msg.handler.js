@@ -13,24 +13,30 @@ class MessageHandler {
   }
 
   _sessionHandler(response) {
-    const index = this.sessions.findIndex(ssn => ssn.userId = response.userId);
-    console.log(`___ _sessionHandler -> userId: ${response.userId} - index: ${index}`);
-    let session = (index >= 0) ? this.sessions[index] : null;
-    console.log(`___ _sessionHandler -> session located:`, session);
-    if (!session) {
-      session = {
-        userId: response.userId,
-        id: this.sessions.length,
-        end: false,
-        lastMsg: null,
-        payload: response
-      };
-      console.log(`___ _sessionHandler -> creating new session:`, session);
-      this.sessions.push(session);
-    } else if (!session.end) {
-      session.payload = response;
-      this.sessions[index] = session;
-      console.log(`___ _sessionHandler -> session already finished.`, session);
+    let session = null;
+    for (let index = 0; index < this.sessions.length; index++) {
+      console.log(`___ _sessionHandler -> userId: ${response.userId} - index: ${index}`);
+      const ssn = this.sessions[index];
+      if(ssn.userId = response.userId){
+        session = Object.assign({}, ssn);
+        console.log(`___ _sessionHandler -> session located:`, session);
+        if (!session) {
+          session = {
+            userId: response.userId,
+            id: this.sessions.length,
+            end: false,
+            lastMsg: null,
+            payload: response
+          };
+          console.log(`___ _sessionHandler -> creating new session:`, session);
+          this.sessions.push(session);
+        } else if (!session.end) {
+          session.payload = response;
+          this.sessions[index] =  Object.assign({}, session);
+          console.log(`___ _sessionHandler -> session already finished.`, session);
+        }
+        break;
+      }
     }
 
     return session;
