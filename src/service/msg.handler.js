@@ -14,7 +14,9 @@ class MessageHandler {
 
   _sessionHandler(response) {
     const index = this.sessions.findIndex(ssn => ssn.userId = response.userId);
+    console.log(`___ _sessionHandler -> userId: ${response.userId} - index: ${index}`);
     let session = (index >= 0) ? this.sessions[index] : null;
+    console.log(`___ _sessionHandler -> session located:`, session);
     if (!session) {
       session = {
         userId: response.userId,
@@ -23,10 +25,12 @@ class MessageHandler {
         lastMsg: null,
         payload: response
       };
+      console.log(`___ _sessionHandler -> creating new session:`, session);
       this.sessions.push(session);
     } else if (!session.end) {
       session.payload = response;
       this.sessions[index] = session;
+      console.log(`___ _sessionHandler -> session already finished.`, session);
     }
 
     return session;
@@ -110,22 +114,29 @@ class MessageHandler {
   }
 
   async eventHandler(event) {
-    console.log('____________________________________________________________')
+    console.log('############################################################');
+    console.log('____________________________________________________________');
     try {
-      console.log('___ EVENT:', event)
+      console.log('___ EVENT:', event);
+      console.log('__________________________________________________________');
       let response = this.messenger.getEventData(event);
-      console.log('___ response:', response)
+      console.log('___ response:', response);
+      console.log('__________________________________________________________');
       let session = this._sessionHandler(response);
-      console.log('___ session:', session)
+      console.log('___ session:', session);
+      console.log('__________________________________________________________');
       let msgFlow = this._setNextMessage(session);
-      console.log('___ msgFlow:', msgFlow)
+      console.log('___ msgFlow:', msgFlow);
+      console.log('__________________________________________________________');
       const msgPkg = this._buildMessage(session, msgFlow);
-      console.log('___ msgPkg:', msgPkg)
+      console.log('___ msgPkg:', msgPkg);
+      console.log('__________________________________________________________');
       await this.messenger.sendMessage(this.token, msgPkg.userId, msgPkg.arg);
     } catch (error) {
-      console.log('___ error:', error)
+      console.log('___ error:', error);
     }
-    console.log('____________________________________________________________')
+    console.log('____________________________________________________________');
+    console.log('############################################################');
   }
 }
 
