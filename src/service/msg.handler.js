@@ -8,7 +8,7 @@ class MessageHandler {
       completedInterraction: 'Obrigado pela participação, seu feedback já foi recebido com sucesso!',
       noValidAwnser: 'Desculpa, não compreendo está resposta.'
     }
-    this.token = 'EAAGTjhZBtCd4BALu4ydKW39oeWowzsJ4N9lNpZCcmuHd7CAN1MRYbNbdOWKlo4p5qY6xNsAnbZCqEnEvccxKqvXdygv8SAadTooOOrXdukhep5BXdVOunfwwTyWz6LlEQgqVId6tZAetiX7At3njc18tutZAEKv9FZAOlmfztkjgZDZD';
+    this.token = 'EAAGZAQDP3SsgBAPMikDPG1AZAokvGMtrLX8f7QrXWFmiqavWp3XYTUx74Q2wMzZCZBjB6BADPLZBxPq7jH6iZCBXPw3BvSz7iuMGJ5wNZAGbwAhaZBaLtNNF3NvE3IHDdVljn9QNG0KvifSdATQ9ZCp4s4KxDAxg27DT4sfnuJiF8vAZDZD';
     this.sessions = [];
   }
 
