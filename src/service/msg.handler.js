@@ -8,7 +8,7 @@ class MessageHandler {
       completedInterraction: 'Obrigado pela participação, seu feedback já foi recebido com sucesso!',
       noValidAwnser: 'Desculpa, não compreendo está resposta.'
     }
-    this.token = 'EAAGZAQDP3SsgBAMPjMLmTZBpxKAmB2GXZBuR4xrO35wV9ZCBOZA436KwN2dDEsu3ZAeSYe5efXsZBSHOCaqy4kPyZAytEhaBrLuSqmcoKB6xeNBFEYtEk2bAfAvUXi1nAtG2mOpclYx3HProcS6ecPV2MhrZAgCYSTPSo4MJA6b7EuQZDZD]';
+    this.token = 'EAAcd0y3CKBUBAMu8Va5hILS6rZCpiwz826w4fXGYhekT5oLTydb5YXdKTHLaG7HoLQIfiZBRnUOF1osR3J2MrHqZB1NCw7gKFQUXVkB4bsSVGRdXKdD9SuUmxP9TzW3UTbboMuqzHpRwe3ozBX6dVGXZAUxg3XmSe95iHeqTdgZDZD';
     this.sessions = [];
   }
 
@@ -32,7 +32,8 @@ class MessageHandler {
         id: this.sessions.length,
         end: false,
         lastMsg: null,
-        payload: response
+        payload: response,
+        noSend: false
       };
       console.log(`___ _sessionHandler -> creating new session:`, session);
       this.sessions.push(session);
