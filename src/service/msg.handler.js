@@ -9,7 +9,8 @@ class MessageHandler {
       restartSessionMsg: 'Estamos reiniciando sua pesquisa, agradecemos sua dedicação em responde-la. 🙂',
       completedInterraction: 'Obrigado pela participação, seu feedback já foi recebido com sucesso!\n\nDeseja refazer a pesquisa, escreva: reiniciar',
       noValidAwnser: 'Desculpa, não compreendo está resposta.\nResponda as perguntas com: Sim ou Não.',
-      alertAwnser: 'A sua ultima pergunta realizada foi:'
+      alertAwnser: 'A sua ultima pergunta realizada foi:',
+      helpMsg: 'Olá! Vimos que você participou do minicurso do ADCC. Gostaríamos de saber como foi sua experiência. Vamos realizar nossa pesquisa.'
     }
     this.token = 'EAAcd0y3CKBUBAMu8Va5hILS6rZCpiwz826w4fXGYhekT5oLTydb5YXdKTHLaG7HoLQIfiZBRnUOF1osR3J2MrHqZB1NCw7gKFQUXVkB4bsSVGRdXKdD9SuUmxP9TzW3UTbboMuqzHpRwe3ozBX6dVGXZAUxg3XmSe95iHeqTdgZDZD';
     this.sessions = [];
@@ -64,14 +65,21 @@ class MessageHandler {
       extraArgForExtraMessage.Text = this.msgDefault.alertAwnser;
       await this.messenger.sendMessage(this.token, session.userId, extraArgForExtraMessage);
       const lastMsg = session.lastMsg;
-      if(lastMsg){
+      if (lastMsg) {
         console.log('_____ _extraActionForText - return this.msgflow[lastMsg.id]:', this.msgflow[lastMsg.id]);
         return this.msgflow[lastMsg.id];
       }
       return this.msgflow[0];
     }
 
-    if (value === 'fim' || value === 'Fim' || value === 'FIM') {
+    if (
+      value === 'encerrar' || value === 'Encerrar' || value === 'ENCERRAR' ||
+      value === 'concluir' || value === 'Concluir' || value === 'CONCLUIR' ||
+      value === 'fim' || value === 'Fim' || value === 'FIM' ||
+      value === 'sair' || value === 'Sair' || value === 'SAIR' ||
+      value === 'exit' || value === 'Exit' || value === 'EXIT' ||
+      value === 'end' || value === 'End' || value === 'END'
+    ) {
       console.log('_____ _extraActionForText - Vamos encerrar a pesquisa.');
       session.end = true;
       this.sessions[session.id] = session;
@@ -79,7 +87,13 @@ class MessageHandler {
       return this.msgflow[1];
     }
 
-    if (value === 'reiniciar' || value === 'Reiniciar' || value === 'REINICIAR') {
+    if (
+      value === 'reiniciar' || value === 'Reiniciar' || value === 'REINICIAR' ||
+      value === 'iniciar' || value === 'Iniciar' || value === 'INICIAR' ||
+      value === 'comecar' || value === 'Comecar' || value === 'COMECAR' ||
+      value === 'restart' || value === 'Restart' || value === 'RESTART' ||
+      value === 'start' || value === 'Start' || value === 'START'
+    ) {
       console.log('_____ _extraActionForText - Reiniciar a pesquisa.');
       session.lastMsg = null;
       session.payload = null;
@@ -91,9 +105,25 @@ class MessageHandler {
       return this.msgflow[2];
     }
 
-    if (value === 'menu' || value === 'Menu' || value === 'MENU' ||
+    if (
+      value === 'menu' || value === 'Menu' || value === 'MENU' ||
       value === 'Socorro' || value === 'socorro' || value === 'SOCORRO' ||
-      value === 'Ajuda' || value === 'ajuda' || value === 'AJUDA') {
+      value === 'Ajuda' || value === 'ajuda' || value === 'AJUDA' ||
+      value === 'help' || value === 'Help' || value === 'HELP' ||
+      value === 'info' || value === 'Info' || value === 'Info' ||
+      value === 'about' || value === 'About' || value === 'About' ||
+      value === 'sobre' || value === 'Sobre' || value === 'SOBRE'
+    ) {
+      if (
+        value === 'Ajuda' || value === 'ajuda' || value === 'AJUDA' ||
+        value === 'help' || value === 'Help' || value === 'HELP' ||
+        value === 'info' || value === 'Info' || value === 'Info'
+      ) {
+        console.log('_____ _extraActionForText - Vamos enviar help msg.');
+        extraArgForExtraMessage.Text = this.msgDefault.helpMsg;
+        await this.messenger.sendMessage(this.token, session.userId, extraArgForExtraMessage);
+      }
+
       console.log('_____ _extraActionForText - Vamos enviar menu de opcoes.');
       extraArgForExtraMessage.Text = this.msgDefault.menuMsg;
       await this.messenger.sendMessage(this.token, session.userId, extraArgForExtraMessage);
