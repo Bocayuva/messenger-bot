@@ -5,8 +5,11 @@ class MessageHandler {
     this.messenger = require('../service/messenger');
     this.msgflow = require('../service/msg.flow');
     this.msgDefault = {
+      menuMsg:'* Deseja continuar de onde parou, escreva: ultima\n* Deseja encerrar pesquisa, escreva: fim\n* Deseja reiniciar pesquisa, escreva: reiniciar',
+      restartSessionMsg: 'Reiniciamos sua pesquisa, obrigado.',
       completedInterraction: 'Obrigado pela participação, seu feedback já foi recebido com sucesso!',
-      noValidAwnser: 'Desculpa, não compreendo está resposta.'
+      noValidAwnser: 'Desculpa, não compreendo está resposta.\nQualquer resposta diferente o bot não considerá valida.\nResponda as perguntas somente com as opcões informadas: Sim ou Não.',
+      alertAwnser: 'A ultima pergunta realizada, foi:'
     }
     this.token = 'EAAcd0y3CKBUBAMu8Va5hILS6rZCpiwz826w4fXGYhekT5oLTydb5YXdKTHLaG7HoLQIfiZBRnUOF1osR3J2MrHqZB1NCw7gKFQUXVkB4bsSVGRdXKdD9SuUmxP9TzW3UTbboMuqzHpRwe3ozBX6dVGXZAUxg3XmSe95iHeqTdgZDZD';
     this.sessions = [];
@@ -18,7 +21,7 @@ class MessageHandler {
     for (let index = 0; index < this.sessions.length; index++) {
       const ssn = this.sessions[index];
       console.log(`___ _sessionHandler -> userId: ${response.userId} - index: ${index} - session:`, ssn);
-      if(ssn.userId === response.userId){
+      if (ssn.userId === response.userId) {
         session = Object.assign({}, ssn);
         position = index;
         console.log(`___ _sessionHandler -> session located:`, session);
@@ -32,14 +35,13 @@ class MessageHandler {
         id: this.sessions.length,
         end: false,
         lastMsg: null,
-        payload: response,
-        noSend: false
+        payload: response
       };
       console.log(`___ _sessionHandler -> creating new session:`, session);
       this.sessions.push(session);
     } else if (!session.end) {
       session.payload = response;
-      this.sessions[position] =  Object.assign({}, session);
+      this.sessions[position] = Object.assign({}, session);
       console.log(`___ _sessionHandler -> session already finished.`, session);
     }
 
@@ -54,6 +56,33 @@ class MessageHandler {
     console.log('______ setNextMessage - payload:', payload)
     console.log('______ setNextMessage - value:', value)
     console.log('______ setNextMessage - responseType:', responseType)
+
+    if (value === 'Última' || value === 'última' || value === 'ultima' || value === 'Ultima' || value === 'ULTIMA') {
+      await this.messenger.sendMessage(this.token, session.userId, this.msgDefault.alertAwnser);
+      return this.msgflow[lastMsg.id];
+    }
+
+    if (value === 'fim' || value === 'Fim' || value === 'FIM') {
+      session.end = true;
+      this.sessions[session.id] = session;
+      return this.msgflow[1];
+    }
+
+    if (value === 'reiniciar' || value === 'Reiniciar' || value === 'REINICIAR') {
+      session.lastMsg = null;
+      session.payload = null;
+      this.sessions[session.id] = session;
+      await this.messenger.sendMessage(this.token, session.userId, this.msgDefault.restartSessionMsg);
+      return this.msgflow[0];
+    }
+
+    if (value === 'menu' || value === 'Menu' || value === 'MENU' ||
+        value === 'Socorro' || value === 'socorro' || value === 'SOCORRO' ||
+        value === 'Ajuda' || value === 'ajuda' || value === 'AJUDA') {
+      await this.messenger.sendMessage(this.token, session.userId, this.msgDefault.menuMsg);
+      return null;
+    }
+
     switch (responseType) {
 
       case this.botresponsetype.TEXT:
@@ -72,6 +101,7 @@ class MessageHandler {
         console.log('_____ _setNextMessage BUTTONS - lastMSG:', lastMsg)
         const newMsg = this.msgflow.find(msg => msg.id == value);
         return newMsg;
+
       case this.botresponsetype.START:
         return this.msgflow[0];
 
@@ -107,17 +137,16 @@ class MessageHandler {
         msgPkg.arg.TemplateType = this.bottemplatetype.TEXT;
         msgPkg.arg.Text = this.msgDefault.noValidAwnser;
       }
-    } else {
-      if (msg) {
+    } else if (msg) {
         session.lastMsg = msg;
         this.sessions[session.id] = session;
-      } else {
-        console.log('OCORREU UM ERROR, NAO ACHAMOS PRIMEIRA MESSAGE');
-      }
-      msgPkg.arg.TemplateType = msg.template;
-      msgPkg.arg.TemplateOption = msg.templateOption;
-      msgPkg.arg.Options = msg.response;
-      msgPkg.arg.Text = msg.text;
+        msgPkg.arg.TemplateType = msg.template;
+        msgPkg.arg.Text = msg.text;
+        msgPkg.arg.TemplateOption = msg.templateOption;
+        msgPkg.arg.Options = msg.response;
+    } else {
+      console.log('NADA PARA FAZER');
+      return null;
     }
 
     return msgPkg;
@@ -143,7 +172,7 @@ class MessageHandler {
       const msgPkg = this._buildMessage(session, msgFlow);
       console.log('___ MSGPKG:', msgPkg);
       console.log('__________________________________________________________');
-      await this.messenger.sendMessage(this.token, msgPkg.userId, msgPkg.arg);
+      if(msgPkg) await this.messenger.sendMessage(this.token, msgPkg.userId, msgPkg.arg);
     } catch (error) {
       console.log('___ ERROR:', error);
     }
