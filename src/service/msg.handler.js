@@ -20,7 +20,6 @@ class MessageHandler {
     let session = null, position = null;
     for (let index = 0; index < this.sessions.length; index++) {
       const ssn = this.sessions[index];
-      console.log(`___ _sessionHandler -> userId: ${response.userId} - index: ${index} - session:`, ssn);
       if (ssn.userId === response.userId) {
         session = Object.assign({}, ssn);
         position = index;
@@ -45,6 +44,7 @@ class MessageHandler {
       console.log(`___ _sessionHandler -> session already finished.`, session);
     }
 
+    session.payload = response;
     return session;
   }
 
@@ -200,23 +200,23 @@ class MessageHandler {
     console.log('*** SESSIONS:', this.sessions);
     console.log('____________________________________________________________');
     try {
-      console.log('___ EVENT:', event);
+      console.log('##### EVENT:', event);
       console.log('__________________________________________________________');
       let response = this.messenger.getEventData(event);
-      console.log('___ RESPONSE:', response);
+      console.log('##### RESPONSE:', response);
       console.log('__________________________________________________________');
       let session = this._sessionHandler(response);
-      console.log('___ SESSION:', session);
+      console.log('##### SESSION:', session);
       console.log('__________________________________________________________');
       let msgFlow = await this._setNextMessage(session);
-      console.log('___ MSGFLOW:', msgFlow);
+      console.log('##### MSGFLOW:', msgFlow);
       console.log('__________________________________________________________');
       const msgPkg = await this._buildMessage(session, msgFlow);
-      console.log('___ MSGPKG:', msgPkg);
+      console.log('##### MSGPKG:', msgPkg);
       console.log('__________________________________________________________');
       if (msgPkg) await this.messenger.sendMessage(this.token, msgPkg.userId, msgPkg.arg);
     } catch (error) {
-      console.log('___ ERROR:', error);
+      console.log('##### ERROR:', error);
     }
     console.log('____________________________________________________________');
     console.log('############################################################');
