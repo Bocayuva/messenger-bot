@@ -60,7 +60,11 @@ class MessageHandler {
       Text: null
     };
 
-    if (value === 'Última' || value === 'última' || value === 'ultima' || value === 'Ultima' || value === 'ULTIMA') {
+    if (
+      value === 'Última' || value === 'última' || value === 'ultima' ||
+      value === 'Ultima' || value === 'ULTIMA' ||
+      value === 'last' || value === 'Last' || value === 'LAST'
+    ) {
       console.log('_____ _extraActionForText - Vamos reenviar a ultima message.');
       extraArgForExtraMessage.Text = this.msgDefault.alertAwnser;
       await this.messenger.sendMessage(this.token, session.userId, extraArgForExtraMessage);
