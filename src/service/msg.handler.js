@@ -6,7 +6,7 @@ class MessageHandler {
     this.msgflow = require('../service/msg.flow');
     this.msgDefault = {
       menuMsg: 'O que você deseja:\n* Continuar de onde parou, escreva: ultima\n* Encerrar pesquisa, escreva: fim\n* Reiniciar pesquisa, escreva: reiniciar',
-      restartSessionMsg: 'Reiniciamos sua pesquisa, obrigado.',
+      restartSessionMsg: 'Estamos reiniciamos sua pesquisa, obrigado pelo seu tempo. 🙂',
       completedInterraction: 'Obrigado pela participação, seu feedback já foi recebido com sucesso!',
       noValidAwnser: 'Desculpa, não compreendo está resposta.\nResponda as perguntas somente com as opcões informadas: Sim ou Não.',
       alertAwnser: 'A ultima pergunta realizada, foi:'

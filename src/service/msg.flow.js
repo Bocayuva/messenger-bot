@@ -7,7 +7,7 @@ module.exports = [
     id: 0,
     template: bottemplatetype.OPTION,
     templateOption: bottemplateoption.INLINEBUTTONS,
-    text: 'Olá! Vimos que você participou do minicurso do ADCC. Gostaríamos de saber como foi sua experiência. Pode nos ajudar? É rapidinho :) \nPor favor, responda as perguntas com Sim ou Não. Ficou perdido no conversa, escreva: Ajuda.',
+    text: 'Olá! Vimos que você participou do minicurso do ADCC. Gostaríamos de saber como foi sua experiência. Pode nos ajudar? É rapidinho :) \n\nPor favor, responda as perguntas com Sim ou Não.\n\nFicou perdido no conversa, escreva: Ajuda.',
     response: [
       {
         msg: 'Não',
