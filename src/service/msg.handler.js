@@ -48,7 +48,7 @@ class MessageHandler {
     return session;
   }
 
-  _setNextMessage(session) {
+  async _setNextMessage(session) {
     const payload = session.payload;
     const lastMsg = session.lastMsg;
     const responseType = payload.response.responseType;
@@ -166,7 +166,7 @@ class MessageHandler {
       let session = this._sessionHandler(response);
       console.log('___ SESSION:', session);
       console.log('__________________________________________________________');
-      let msgFlow = this._setNextMessage(session);
+      let msgFlow = await this._setNextMessage(session);
       console.log('___ MSGFLOW:', msgFlow);
       console.log('__________________________________________________________');
       const msgPkg = this._buildMessage(session, msgFlow);
