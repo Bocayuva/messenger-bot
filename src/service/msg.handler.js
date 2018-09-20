@@ -124,7 +124,7 @@ class MessageHandler {
     }
   }
 
-  _buildMessage(session, msg) {
+  async _buildMessage(session, msg) {
     let msgPkg = {
       userId: session.userId,
       arg: {
@@ -150,6 +150,14 @@ class MessageHandler {
       } else {
         msgPkg.arg.TemplateType = this.bottemplatetype.TEXT;
         msgPkg.arg.Text = this.msgDefault.noValidAwnser;
+        await this.messenger.sendMessage(this.token, session.userId, msgPkg);
+        const lstmsg = session.lastMsg
+        msgPkg.arg.TemplateType = lstmsg.template;
+        msgPkg.arg.Text = lstmsg.text;
+        msgPkg.arg.TemplateOption = lstmsg.templateOption;
+        msgPkg.arg.Options = lstmsg.response;
+        await this.messenger.sendMessage(this.token, session.userId, msgPkg);
+        return null;
       }
     } else if (msg) {
       session.lastMsg = msg;
@@ -183,7 +191,7 @@ class MessageHandler {
       let msgFlow = await this._setNextMessage(session);
       console.log('___ MSGFLOW:', msgFlow);
       console.log('__________________________________________________________');
-      const msgPkg = this._buildMessage(session, msgFlow);
+      const msgPkg = await this._buildMessage(session, msgFlow);
       console.log('___ MSGPKG:', msgPkg);
       console.log('__________________________________________________________');
       if (msgPkg) await this.messenger.sendMessage(this.token, msgPkg.userId, msgPkg.arg);
