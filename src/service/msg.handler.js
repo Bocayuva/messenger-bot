@@ -63,8 +63,12 @@ class MessageHandler {
       console.log('_____ _extraActionForText - Vamos reenviar a ultima message.');
       extraArgForExtraMessage.Text = this.msgDefault.alertAwnser;
       await this.messenger.sendMessage(this.token, session.userId, extraArgForExtraMessage);
-      console.log('_____ _extraActionForText - return this.msgflow[lastMsg.id]:', this.msgflow[lastMsg.id]);
-      return this.msgflow[lastMsg.id];
+      const lastMsg = session.lastMsg;
+      if(lastMsg){
+        console.log('_____ _extraActionForText - return this.msgflow[lastMsg.id]:', this.msgflow[lastMsg.id]);
+        return this.msgflow[lastMsg.id];
+      }
+      return this.msgflow[0];
     }
 
     if (value === 'fim' || value === 'Fim' || value === 'FIM') {
@@ -83,7 +87,7 @@ class MessageHandler {
       extraArgForExtraMessage.Text = this.msgDefault.restartSessionMsg;
       await this.messenger.sendMessage(this.token, session.userId, extraArgForExtraMessage);
       console.log('_____ _extraActionForText - return this.msgflow[0]:', this.msgflow[0]);
-      return this.msgflow[0];
+      return this.msgflow[2];
     }
 
     if (value === 'menu' || value === 'Menu' || value === 'MENU' ||
@@ -149,6 +153,7 @@ class MessageHandler {
 
     if (msg && msg.menu) {
       console.log('_____ _buildMessage - ENVIOU MENU DE AJUDA');
+      return null;
     } else if (session.end) {
       console.log('_____ _buildMessage - session.end: TRUE');
       msgPkg.arg.TemplateType = this.bottemplatetype.TEXT;
