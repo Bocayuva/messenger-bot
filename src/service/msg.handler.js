@@ -5,7 +5,7 @@ class MessageHandler {
     this.messenger = require('../service/messenger');
     this.msgflow = require('../service/msg.flow');
     this.msgDefault = {
-      menuMsg:'* Deseja continuar de onde parou, escreva: ultima\n* Deseja encerrar pesquisa, escreva: fim\n* Deseja reiniciar pesquisa, escreva: reiniciar',
+      menuMsg: '* Deseja continuar de onde parou, escreva: ultima\n* Deseja encerrar pesquisa, escreva: fim\n* Deseja reiniciar pesquisa, escreva: reiniciar',
       restartSessionMsg: 'Reiniciamos sua pesquisa, obrigado.',
       completedInterraction: 'Obrigado pela participação, seu feedback já foi recebido com sucesso!',
       noValidAwnser: 'Desculpa, não compreendo está resposta.\nQualquer resposta diferente o bot não considerá valida.\nResponda as perguntas somente com as opcões informadas: Sim ou Não.',
@@ -57,29 +57,43 @@ class MessageHandler {
     console.log('______ setNextMessage - value:', value)
     console.log('______ setNextMessage - responseType:', responseType)
 
+    let extraArgForExtraMessage = {
+      TemplateType: this.bottemplatetype.TEXT,
+      TemplateOption: null,
+      Options: null,
+      Text: null
+    };
+
     if (value === 'Última' || value === 'última' || value === 'ultima' || value === 'Ultima' || value === 'ULTIMA') {
-      await this.messenger.sendMessage(this.token, session.userId, this.msgDefault.alertAwnser);
+      console.log('_____ _setNextMessage - Vamos reenviar a ultima message.');
+      extraArgForExtraMessage.Text = this.msgDefault.alertAwnser;
+      await this.messenger.sendMessage(this.token, session.userId, extraArgForExtraMessage);
       return this.msgflow[lastMsg.id];
     }
 
     if (value === 'fim' || value === 'Fim' || value === 'FIM') {
+      console.log('_____ _setNextMessage - Vamos encerrar a pesquisa.');
       session.end = true;
       this.sessions[session.id] = session;
       return this.msgflow[1];
     }
 
     if (value === 'reiniciar' || value === 'Reiniciar' || value === 'REINICIAR') {
+      console.log('_____ _setNextMessage - Reiniciar a pesquisa.');
       session.lastMsg = null;
       session.payload = null;
       this.sessions[session.id] = session;
-      await this.messenger.sendMessage(this.token, session.userId, this.msgDefault.restartSessionMsg);
+      extraArgForExtraMessage.Text = this.msgDefault.restartSessionMsg;
+      await this.messenger.sendMessage(this.token, session.userId, extraArgForExtraMessage);
       return this.msgflow[0];
     }
 
     if (value === 'menu' || value === 'Menu' || value === 'MENU' ||
-        value === 'Socorro' || value === 'socorro' || value === 'SOCORRO' ||
-        value === 'Ajuda' || value === 'ajuda' || value === 'AJUDA') {
-      await this.messenger.sendMessage(this.token, session.userId, this.msgDefault.menuMsg);
+      value === 'Socorro' || value === 'socorro' || value === 'SOCORRO' ||
+      value === 'Ajuda' || value === 'ajuda' || value === 'AJUDA') {
+      console.log('_____ _setNextMessage - Vamos enviar menu de opcoes.');
+      extraArgForExtraMessage.Text = this.msgDefault.menuMsg;
+      await this.messenger.sendMessage(this.token, session.userId, extraArgForExtraMessage);
       return null;
     }
 
@@ -138,12 +152,12 @@ class MessageHandler {
         msgPkg.arg.Text = this.msgDefault.noValidAwnser;
       }
     } else if (msg) {
-        session.lastMsg = msg;
-        this.sessions[session.id] = session;
-        msgPkg.arg.TemplateType = msg.template;
-        msgPkg.arg.Text = msg.text;
-        msgPkg.arg.TemplateOption = msg.templateOption;
-        msgPkg.arg.Options = msg.response;
+      session.lastMsg = msg;
+      this.sessions[session.id] = session;
+      msgPkg.arg.TemplateType = msg.template;
+      msgPkg.arg.Text = msg.text;
+      msgPkg.arg.TemplateOption = msg.templateOption;
+      msgPkg.arg.Options = msg.response;
     } else {
       console.log('NADA PARA FAZER');
       return null;
@@ -172,7 +186,7 @@ class MessageHandler {
       const msgPkg = this._buildMessage(session, msgFlow);
       console.log('___ MSGPKG:', msgPkg);
       console.log('__________________________________________________________');
-      if(msgPkg) await this.messenger.sendMessage(this.token, msgPkg.userId, msgPkg.arg);
+      if (msgPkg) await this.messenger.sendMessage(this.token, msgPkg.userId, msgPkg.arg);
     } catch (error) {
       console.log('___ ERROR:', error);
     }
