@@ -48,15 +48,7 @@ class MessageHandler {
     return session;
   }
 
-  async _setNextMessage(session) {
-    const payload = session.payload;
-    const lastMsg = session.lastMsg;
-    const responseType = payload.response.responseType;
-    const value = (payload.response && payload.response.value) ? payload.response.value : null;
-    console.log('______ setNextMessage - payload:', payload)
-    console.log('______ setNextMessage - value:', value)
-    console.log('______ setNextMessage - responseType:', responseType)
-
+  async _extraActionForText(session, value){
     let extraArgForExtraMessage = {
       TemplateType: this.bottemplatetype.TEXT,
       TemplateOption: null,
@@ -94,29 +86,40 @@ class MessageHandler {
       console.log('_____ _setNextMessage - Vamos enviar menu de opcoes.');
       extraArgForExtraMessage.Text = this.msgDefault.menuMsg;
       await this.messenger.sendMessage(this.token, session.userId, extraArgForExtraMessage);
-      return null;
     }
+
+    return null;
+  }
+
+  async _setNextMessage(session) {
+    const payload = session.payload;
+    const lastMsg = session.lastMsg;
+    const responseType = payload.response.responseType;
+    const value = (payload.response && payload.response.value) ? payload.response.value : null;
+    console.log('______ setNextMessage - payload:', payload);
+    console.log('______ setNextMessage - value:', value);
+    console.log('______ setNextMessage - responseType:', responseType);
 
     switch (responseType) {
 
       case this.botresponsetype.TEXT:
-
-        console.log('_____ _setNextMessage TEXT - lastMSG:', lastMsg)
+        console.log('_____ _setNextMessage TEXT - lastMSG:', lastMsg);
         if (lastMsg && lastMsg.response && payload.response.value) {
           const anwser = lastMsg.response.find(resp => resp.msg === value);
           if (anwser && anwser.nextMsgId) {
             return this.msgflow.find(msg => msg.id === anwser.nextMsgId);
           }
         }
-        return null;
+        return this._extraActionForText(session, payload.response.value);
+
 
       case this.botresponsetype.BUTTONS:
-
-        console.log('_____ _setNextMessage BUTTONS - lastMSG:', lastMsg)
+        console.log('_____ _setNextMessage BUTTONS - lastMSG:', lastMsg);
         const newMsg = this.msgflow.find(msg => msg.id == value);
         return newMsg;
 
       case this.botresponsetype.START:
+        console.log('_____ _setNextMessage BUTTONS INICIO');
         return this.msgflow[0];
 
       default:
