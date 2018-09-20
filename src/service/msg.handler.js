@@ -7,7 +7,7 @@ class MessageHandler {
     this.msgDefault = {
       menuMsg: 'O que você deseja:\n\n* Continuar de onde parou, escreva: ultima\n\n* Encerrar pesquisa, escreva: fim\n\n* Reiniciar pesquisa, escreva: reiniciar',
       restartSessionMsg: 'Estamos reiniciando sua pesquisa, agradecemos sua dedicação em responde-la. 🙂',
-      completedInterraction: 'Obrigado pela participação, seu feedback já foi recebido com sucesso!',
+      completedInterraction: 'Obrigado pela participação, seu feedback já foi recebido com sucesso!\n\nDeseja refazer a pesquisa, escreva: reiniciar',
       noValidAwnser: 'Desculpa, não compreendo está resposta.\nResponda as perguntas com: Sim ou Não.',
       alertAwnser: 'A sua ultima pergunta realizada foi:'
     }
