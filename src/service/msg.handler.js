@@ -118,7 +118,7 @@ class MessageHandler {
             return this.msgflow.find(msg => msg.id === anwser.nextMsgId);
           }
         }
-        return this._extraActionForText(session, payload.response.value);
+        return this._extraActionForText(session, value);
 
 
       case this.botresponsetype.BUTTONS:
