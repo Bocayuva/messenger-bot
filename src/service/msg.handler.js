@@ -5,11 +5,11 @@ class MessageHandler {
     this.messenger = require('../service/messenger');
     this.msgflow = require('../service/msg.flow');
     this.msgDefault = {
-      menuMsg: 'O que você deseja:\n* Continuar de onde parou, escreva: ultima\n* Encerrar pesquisa, escreva: fim\n* Reiniciar pesquisa, escreva: reiniciar',
-      restartSessionMsg: 'Estamos reiniciamos sua pesquisa, obrigado pelo seu tempo. 🙂',
+      menuMsg: 'O que você deseja:\n\n* Continuar de onde parou, escreva: ultima\n\n* Encerrar pesquisa, escreva: fim\n\n* Reiniciar pesquisa, escreva: reiniciar',
+      restartSessionMsg: 'Estamos reiniciando sua pesquisa, agradecemos sua dedicação em responde-la. 🙂',
       completedInterraction: 'Obrigado pela participação, seu feedback já foi recebido com sucesso!',
-      noValidAwnser: 'Desculpa, não compreendo está resposta.\nResponda as perguntas somente com as opcões informadas: Sim ou Não.',
-      alertAwnser: 'A ultima pergunta realizada, foi:'
+      noValidAwnser: 'Desculpa, não compreendo está resposta.\nResponda as perguntas com: Sim ou Não.',
+      alertAwnser: 'A sua ultima pergunta realizada foi:'
     }
     this.token = 'EAAcd0y3CKBUBAMu8Va5hILS6rZCpiwz826w4fXGYhekT5oLTydb5YXdKTHLaG7HoLQIfiZBRnUOF1osR3J2MrHqZB1NCw7gKFQUXVkB4bsSVGRdXKdD9SuUmxP9TzW3UTbboMuqzHpRwe3ozBX6dVGXZAUxg3XmSe95iHeqTdgZDZD';
     this.sessions = [];
