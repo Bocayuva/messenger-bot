@@ -7,7 +7,7 @@ module.exports = [
     id: 0,
     template: bottemplatetype.OPTION,
     templateOption: bottemplateoption.INLINEBUTTONS,
-    text: 'Olá! Vimos que você participou do minicurso do ADCC. Gostaríamos de saber como foi sua experiência. Pode nos ajudar? É rapidinho :)',
+    text: 'Olá! Vimos que você participou do minicurso do ADCC. Gostaríamos de saber como foi sua experiência. Pode nos ajudar? É rapidinho :). Por favor, responda Sim ou Não.',
     response: [
       {
         msg: 'Não',
@@ -30,7 +30,7 @@ module.exports = [
     id: 2,
     template: bottemplatetype.OPTION,
     templateOption: bottemplateoption.INLINEBUTTONS,
-    text: 'O local e o material disponibilizado foram adequados para o minicurso?',
+    text: 'O local e o material disponibilizado foram adequados para o minicurso? Por favor, responda Sim ou Não.',
     response: [
       {
         msg: 'Não',
@@ -46,7 +46,7 @@ module.exports = [
     id: 3,
     template: bottemplatetype.OPTION,
     templateOption: bottemplateoption.INLINEBUTTONS,
-    text: 'O palestrante mostrou pleno domínio sobre a ferramenta?',
+    text: 'O palestrante mostrou pleno domínio sobre a ferramenta? Por favor, responda Sim ou Não.',
     response: [
       {
         msg: 'Não',
@@ -62,7 +62,7 @@ module.exports = [
     id: 4,
     template: bottemplatetype.OPTION,
     templateOption: bottemplateoption.INLINEBUTTONS,
-    text: 'O palestrante se mostrou disponível para esclarecer dúvidas?',
+    text: 'O palestrante se mostrou disponível para esclarecer dúvidas? Por favor, responda Sim ou Não.',
     response: [
       {
         msg: 'Não',
