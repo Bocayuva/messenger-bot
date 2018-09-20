@@ -83,6 +83,7 @@ class MessageHandler {
       console.log('_____ _extraActionForText - Reiniciar a pesquisa.');
       session.lastMsg = null;
       session.payload = null;
+      session.end = false;
       this.sessions[session.id] = session;
       extraArgForExtraMessage.Text = this.msgDefault.restartSessionMsg;
       await this.messenger.sendMessage(this.token, session.userId, extraArgForExtraMessage);
