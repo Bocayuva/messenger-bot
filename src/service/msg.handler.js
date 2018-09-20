@@ -48,7 +48,7 @@ class MessageHandler {
     return session;
   }
 
-  async _extraActionForText(session, value){
+  async _extraActionForText(session, value) {
     console.log('_____ _extraActionForText - session:', session);
     console.log('_____ _extraActionForText - value:', value);
 
@@ -147,45 +147,45 @@ class MessageHandler {
       }
     }
 
-    if(!msg.menu){
-      if (session.end) {
-        console.log('_____ _buildMessage - session.end: TRUE');
-        msgPkg.arg.TemplateType = this.bottemplatetype.TEXT;
-        msgPkg.arg.Text = this.msgDefault.completedInterraction;
-      } else if (session.lastMsg) {
-        console.log('_____ _buildMessage - session.lastMsg: TRUE');
-        if (msg) {
-          console.log('_____ _buildMessage - session.lastMsg: TRUE - msg: TRUE');
-          session.lastMsg = msg;
-          if (msg.end) session.end = true
-          this.sessions[session.id] = session;
-          msgPkg.arg.TemplateType = msg.template;
-          msgPkg.arg.Text = msg.text;
-          msgPkg.arg.TemplateOption = msg.templateOption;
-          msgPkg.arg.Options = msg.response;
-        } else {
-          console.log('_____ _buildMessage - session.lastMsg: TRUE - msg: FALSE');
-          await this.messenger.sendMessage(this.token, session.userId, {TemplateType: this.bottemplatetype.TEXT, Text: this.msgDefault.noValidAwnser});
-          const lstmsg = session.lastMsg
-          console.log('_____ _buildMessage - session.lastMsg: TRUE - msg: FALSE - lstmsg:', lstmsg);
-          const arg = {
-            TemplateType: lstmsg.template,
-            Text: lstmsg.text,
-            TemplateOption: lstmsg.templateOption,
-            Options: lstmsg.response
-          }
-          await this.messenger.sendMessage(this.token, session.userId, arg);
-          return null;
-        }
-      } else if (msg) {
-        console.log('_____ _buildMessage - session.lastMsg: FALSE - msg: TRUE - msg:', msg);
+    if (msg && msg.menu) {
+      console.log('_____ _buildMessage - ENVIOU MENU DE AJUDA');
+    } else if (session.end) {
+      console.log('_____ _buildMessage - session.end: TRUE');
+      msgPkg.arg.TemplateType = this.bottemplatetype.TEXT;
+      msgPkg.arg.Text = this.msgDefault.completedInterraction;
+    } else if (session.lastMsg) {
+      console.log('_____ _buildMessage - session.lastMsg: TRUE');
+      if (msg) {
+        console.log('_____ _buildMessage - session.lastMsg: TRUE - msg: TRUE');
         session.lastMsg = msg;
+        if (msg.end) session.end = true
         this.sessions[session.id] = session;
         msgPkg.arg.TemplateType = msg.template;
         msgPkg.arg.Text = msg.text;
         msgPkg.arg.TemplateOption = msg.templateOption;
         msgPkg.arg.Options = msg.response;
+      } else {
+        console.log('_____ _buildMessage - session.lastMsg: TRUE - msg: FALSE');
+        await this.messenger.sendMessage(this.token, session.userId, { TemplateType: this.bottemplatetype.TEXT, Text: this.msgDefault.noValidAwnser });
+        const lstmsg = session.lastMsg
+        console.log('_____ _buildMessage - session.lastMsg: TRUE - msg: FALSE - lstmsg:', lstmsg);
+        const arg = {
+          TemplateType: lstmsg.template,
+          Text: lstmsg.text,
+          TemplateOption: lstmsg.templateOption,
+          Options: lstmsg.response
+        }
+        await this.messenger.sendMessage(this.token, session.userId, arg);
+        return null;
       }
+    } else if (msg) {
+      console.log('_____ _buildMessage - session.lastMsg: FALSE - msg: TRUE - msg:', msg);
+      session.lastMsg = msg;
+      this.sessions[session.id] = session;
+      msgPkg.arg.TemplateType = msg.template;
+      msgPkg.arg.Text = msg.text;
+      msgPkg.arg.TemplateOption = msg.templateOption;
+      msgPkg.arg.Options = msg.response;
     } else {
       console.log('_____ _buildMessage - NADA PARA FAZER');
       return null;
