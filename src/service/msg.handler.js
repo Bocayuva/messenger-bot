@@ -49,6 +49,9 @@ class MessageHandler {
   }
 
   async _extraActionForText(session, value){
+    console.log('_____ _extraActionForText - session:', session);
+    console.log('_____ _extraActionForText - value:', value);
+
     let extraArgForExtraMessage = {
       TemplateType: this.bottemplatetype.TEXT,
       TemplateOption: null,
@@ -57,37 +60,41 @@ class MessageHandler {
     };
 
     if (value === 'Última' || value === 'última' || value === 'ultima' || value === 'Ultima' || value === 'ULTIMA') {
-      console.log('_____ _setNextMessage - Vamos reenviar a ultima message.');
+      console.log('_____ _extraActionForText - Vamos reenviar a ultima message.');
       extraArgForExtraMessage.Text = this.msgDefault.alertAwnser;
       await this.messenger.sendMessage(this.token, session.userId, extraArgForExtraMessage);
+      console.log('_____ _extraActionForText - return this.msgflow[lastMsg.id]:', this.msgflow[lastMsg.id]);
       return this.msgflow[lastMsg.id];
     }
 
     if (value === 'fim' || value === 'Fim' || value === 'FIM') {
-      console.log('_____ _setNextMessage - Vamos encerrar a pesquisa.');
+      console.log('_____ _extraActionForText - Vamos encerrar a pesquisa.');
       session.end = true;
       this.sessions[session.id] = session;
+      console.log('_____ _extraActionForText - return this.msgflow[1]:', this.msgflow[1]);
       return this.msgflow[1];
     }
 
     if (value === 'reiniciar' || value === 'Reiniciar' || value === 'REINICIAR') {
-      console.log('_____ _setNextMessage - Reiniciar a pesquisa.');
+      console.log('_____ _extraActionForText - Reiniciar a pesquisa.');
       session.lastMsg = null;
       session.payload = null;
       this.sessions[session.id] = session;
       extraArgForExtraMessage.Text = this.msgDefault.restartSessionMsg;
       await this.messenger.sendMessage(this.token, session.userId, extraArgForExtraMessage);
+      console.log('_____ _extraActionForText - return this.msgflow[0]:', this.msgflow[0]);
       return this.msgflow[0];
     }
 
     if (value === 'menu' || value === 'Menu' || value === 'MENU' ||
       value === 'Socorro' || value === 'socorro' || value === 'SOCORRO' ||
       value === 'Ajuda' || value === 'ajuda' || value === 'AJUDA') {
-      console.log('_____ _setNextMessage - Vamos enviar menu de opcoes.');
+      console.log('_____ _extraActionForText - Vamos enviar menu de opcoes.');
       extraArgForExtraMessage.Text = this.msgDefault.menuMsg;
       await this.messenger.sendMessage(this.token, session.userId, extraArgForExtraMessage);
     }
 
+    console.log('_____ _extraActionForText - return NULL');
     return null;
   }
 
@@ -106,6 +113,7 @@ class MessageHandler {
         console.log('_____ _setNextMessage TEXT - lastMSG:', lastMsg);
         if (lastMsg && lastMsg.response && payload.response.value) {
           const anwser = lastMsg.response.find(resp => resp.msg === value);
+          console.log('_____ _setNextMessage TEXT - anwser:', anwser);
           if (anwser && anwser.nextMsgId) {
             return this.msgflow.find(msg => msg.id === anwser.nextMsgId);
           }
@@ -139,10 +147,13 @@ class MessageHandler {
     }
 
     if (session.end) {
+      console.log('_____ _buildMessage - session.end: TRUE');
       msgPkg.arg.TemplateType = this.bottemplatetype.TEXT;
       msgPkg.arg.Text = this.msgDefault.completedInterraction;
     } else if (session.lastMsg) {
+      console.log('_____ _buildMessage - session.lastMsg: TRUE');
       if (msg) {
+        console.log('_____ _buildMessage - session.lastMsg: TRUE - msg: TRUE');
         session.lastMsg = msg;
         if (msg.end) session.end = true
         this.sessions[session.id] = session;
@@ -151,10 +162,13 @@ class MessageHandler {
         msgPkg.arg.TemplateOption = msg.templateOption;
         msgPkg.arg.Options = msg.response;
       } else {
+        console.log('_____ _buildMessage - session.lastMsg: TRUE - msg: FALSE');
         msgPkg.arg.TemplateType = this.bottemplatetype.TEXT;
         msgPkg.arg.Text = this.msgDefault.noValidAwnser;
         await this.messenger.sendMessage(this.token, session.userId, msgPkg);
+
         const lstmsg = session.lastMsg
+        console.log('_____ _buildMessage - session.lastMsg: TRUE - msg: FALSE - lstmsg:', lstmsg);
         msgPkg.arg.TemplateType = lstmsg.template;
         msgPkg.arg.Text = lstmsg.text;
         msgPkg.arg.TemplateOption = lstmsg.templateOption;
@@ -163,6 +177,7 @@ class MessageHandler {
         return null;
       }
     } else if (msg) {
+      console.log('_____ _buildMessage - session.lastMsg: FALSE - msg: TRUE - msg:', msg);
       session.lastMsg = msg;
       this.sessions[session.id] = session;
       msgPkg.arg.TemplateType = msg.template;
@@ -170,7 +185,7 @@ class MessageHandler {
       msgPkg.arg.TemplateOption = msg.templateOption;
       msgPkg.arg.Options = msg.response;
     } else {
-      console.log('NADA PARA FAZER');
+      console.log('_____ _buildMessage - NADA PARA FAZER');
       return null;
     }
 
