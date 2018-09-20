@@ -5,7 +5,7 @@ class MessageHandler {
     this.messenger = require('../service/messenger');
     this.msgflow = require('../service/msg.flow');
     this.msgDefault = {
-      menuMsg: '* Deseja continuar de onde parou, escreva: ultima\n* Deseja encerrar pesquisa, escreva: fim\n* Deseja reiniciar pesquisa, escreva: reiniciar',
+      menuMsg: 'O que você deseja:\n* Continuar de onde parou, escreva: ultima\n* Encerrar pesquisa, escreva: fim\n* Reiniciar pesquisa, escreva: reiniciar',
       restartSessionMsg: 'Reiniciamos sua pesquisa, obrigado.',
       completedInterraction: 'Obrigado pela participação, seu feedback já foi recebido com sucesso!',
       noValidAwnser: 'Desculpa, não compreendo está resposta.\nQualquer resposta diferente o bot não considerá valida.\nResponda as perguntas somente com as opcões informadas: Sim ou Não.',
