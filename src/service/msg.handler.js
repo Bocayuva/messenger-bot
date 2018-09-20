@@ -163,17 +163,16 @@ class MessageHandler {
         msgPkg.arg.Options = msg.response;
       } else {
         console.log('_____ _buildMessage - session.lastMsg: TRUE - msg: FALSE');
-        msgPkg.arg.TemplateType = this.bottemplatetype.TEXT;
-        msgPkg.arg.Text = this.msgDefault.noValidAwnser;
-        await this.messenger.sendMessage(this.token, session.userId, msgPkg);
-
+        await this.messenger.sendMessage(this.token, session.userId, {TemplateType: this.bottemplatetype.TEXT, Text: this.msgDefault.noValidAwnser});
         const lstmsg = session.lastMsg
         console.log('_____ _buildMessage - session.lastMsg: TRUE - msg: FALSE - lstmsg:', lstmsg);
-        msgPkg.arg.TemplateType = lstmsg.template;
-        msgPkg.arg.Text = lstmsg.text;
-        msgPkg.arg.TemplateOption = lstmsg.templateOption;
-        msgPkg.arg.Options = lstmsg.response;
-        await this.messenger.sendMessage(this.token, session.userId, msgPkg);
+        const arg = {
+          TemplateType: lstmsg.template,
+          Text: lstmsg.text,
+          TemplateOption: lstmsg.templateOption,
+          Options: lstmsg.response
+        }
+        await this.messenger.sendMessage(this.token, session.userId, arg);
         return null;
       }
     } else if (msg) {
