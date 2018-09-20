@@ -8,7 +8,7 @@ class MessageHandler {
       menuMsg: 'O que você deseja:\n* Continuar de onde parou, escreva: ultima\n* Encerrar pesquisa, escreva: fim\n* Reiniciar pesquisa, escreva: reiniciar',
       restartSessionMsg: 'Reiniciamos sua pesquisa, obrigado.',
       completedInterraction: 'Obrigado pela participação, seu feedback já foi recebido com sucesso!',
-      noValidAwnser: 'Desculpa, não compreendo está resposta.\nQualquer resposta diferente o bot não considerá valida.\nResponda as perguntas somente com as opcões informadas: Sim ou Não.',
+      noValidAwnser: 'Desculpa, não compreendo está resposta.\nResponda as perguntas somente com as opcões informadas: Sim ou Não.',
       alertAwnser: 'A ultima pergunta realizada, foi:'
     }
     this.token = 'EAAcd0y3CKBUBAMu8Va5hILS6rZCpiwz826w4fXGYhekT5oLTydb5YXdKTHLaG7HoLQIfiZBRnUOF1osR3J2MrHqZB1NCw7gKFQUXVkB4bsSVGRdXKdD9SuUmxP9TzW3UTbboMuqzHpRwe3ozBX6dVGXZAUxg3XmSe95iHeqTdgZDZD';
@@ -92,6 +92,7 @@ class MessageHandler {
       console.log('_____ _extraActionForText - Vamos enviar menu de opcoes.');
       extraArgForExtraMessage.Text = this.msgDefault.menuMsg;
       await this.messenger.sendMessage(this.token, session.userId, extraArgForExtraMessage);
+      return { menu: true };
     }
 
     console.log('_____ _extraActionForText - return NULL');
@@ -146,43 +147,45 @@ class MessageHandler {
       }
     }
 
-    if (session.end) {
-      console.log('_____ _buildMessage - session.end: TRUE');
-      msgPkg.arg.TemplateType = this.bottemplatetype.TEXT;
-      msgPkg.arg.Text = this.msgDefault.completedInterraction;
-    } else if (session.lastMsg) {
-      console.log('_____ _buildMessage - session.lastMsg: TRUE');
-      if (msg) {
-        console.log('_____ _buildMessage - session.lastMsg: TRUE - msg: TRUE');
+    if(!msg.menu){
+      if (session.end) {
+        console.log('_____ _buildMessage - session.end: TRUE');
+        msgPkg.arg.TemplateType = this.bottemplatetype.TEXT;
+        msgPkg.arg.Text = this.msgDefault.completedInterraction;
+      } else if (session.lastMsg) {
+        console.log('_____ _buildMessage - session.lastMsg: TRUE');
+        if (msg) {
+          console.log('_____ _buildMessage - session.lastMsg: TRUE - msg: TRUE');
+          session.lastMsg = msg;
+          if (msg.end) session.end = true
+          this.sessions[session.id] = session;
+          msgPkg.arg.TemplateType = msg.template;
+          msgPkg.arg.Text = msg.text;
+          msgPkg.arg.TemplateOption = msg.templateOption;
+          msgPkg.arg.Options = msg.response;
+        } else {
+          console.log('_____ _buildMessage - session.lastMsg: TRUE - msg: FALSE');
+          await this.messenger.sendMessage(this.token, session.userId, {TemplateType: this.bottemplatetype.TEXT, Text: this.msgDefault.noValidAwnser});
+          const lstmsg = session.lastMsg
+          console.log('_____ _buildMessage - session.lastMsg: TRUE - msg: FALSE - lstmsg:', lstmsg);
+          const arg = {
+            TemplateType: lstmsg.template,
+            Text: lstmsg.text,
+            TemplateOption: lstmsg.templateOption,
+            Options: lstmsg.response
+          }
+          await this.messenger.sendMessage(this.token, session.userId, arg);
+          return null;
+        }
+      } else if (msg) {
+        console.log('_____ _buildMessage - session.lastMsg: FALSE - msg: TRUE - msg:', msg);
         session.lastMsg = msg;
-        if (msg.end) session.end = true
         this.sessions[session.id] = session;
         msgPkg.arg.TemplateType = msg.template;
         msgPkg.arg.Text = msg.text;
         msgPkg.arg.TemplateOption = msg.templateOption;
         msgPkg.arg.Options = msg.response;
-      } else {
-        console.log('_____ _buildMessage - session.lastMsg: TRUE - msg: FALSE');
-        await this.messenger.sendMessage(this.token, session.userId, {TemplateType: this.bottemplatetype.TEXT, Text: this.msgDefault.noValidAwnser});
-        const lstmsg = session.lastMsg
-        console.log('_____ _buildMessage - session.lastMsg: TRUE - msg: FALSE - lstmsg:', lstmsg);
-        const arg = {
-          TemplateType: lstmsg.template,
-          Text: lstmsg.text,
-          TemplateOption: lstmsg.templateOption,
-          Options: lstmsg.response
-        }
-        await this.messenger.sendMessage(this.token, session.userId, arg);
-        return null;
       }
-    } else if (msg) {
-      console.log('_____ _buildMessage - session.lastMsg: FALSE - msg: TRUE - msg:', msg);
-      session.lastMsg = msg;
-      this.sessions[session.id] = session;
-      msgPkg.arg.TemplateType = msg.template;
-      msgPkg.arg.Text = msg.text;
-      msgPkg.arg.TemplateOption = msg.templateOption;
-      msgPkg.arg.Options = msg.response;
     } else {
       console.log('_____ _buildMessage - NADA PARA FAZER');
       return null;
