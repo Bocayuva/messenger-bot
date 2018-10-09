@@ -12,7 +12,7 @@ class MessageHandler {
       alertAwnser: 'A sua ultima pergunta realizada foi:',
       helpMsg: 'Olá! Vimos que você participou do minicurso do ADCC. Gostaríamos de saber como foi sua experiência. Vamos realizar nossa pesquisa.'
     }
-    this.token = 'EAACHL5ZBDj1UBAJzwNRxZBaoZCUCJc1mHOeu2TGmZATlVjpSRRzS0cb5UkeVWvR8itAXC5ANZBTNs8FRWOxAPrlWNkDyMvWqbk9gLoTNQn4fa7iLmPBp3Vlqvww6u0imw6JcdZA6ZAB3rxgDbKfOxZAu8dzZBhxXeN5XmUdrNuRPGggZDZD';
+    this.token = process.env.TOKEN;
     this.sessions = [];
   }
 
